@@ -1,0 +1,2107 @@
+{
+  "$type": "Models.Core.Simulations, Models",
+  "Version": 169,
+  "Name": "Simulations",
+  "ResourceName": null,
+  "Children": [
+    {
+      "$type": "Models.Storage.DataStore, Models",
+      "useFirebird": false,
+      "CustomFileName": null,
+      "Name": "DataStore",
+      "ResourceName": null,
+      "Children": [],
+      "Enabled": true,
+      "ReadOnly": false
+    },
+    {
+      "$type": "Models.Factorial.Experiment, Models",
+      "DisabledSimNames": null,
+      "Name": "Wheat",
+      "ResourceName": null,
+      "Children": [
+        {
+          "$type": "Models.Factorial.Factors, Models",
+          "Name": "Factors",
+          "ResourceName": null,
+          "Children": [
+            {
+              "$type": "Models.Factorial.Factor, Models",
+              "Specification": "",
+              "Name": "WeatherYear",
+              "ResourceName": null,
+              "Children": [
+                {
+                  "$type": "Models.Factorial.CompositeFactor, Models",
+                  "Specifications": [
+                    "[Clock].StartDate = 2021-01-01",
+                    "[Clock].EndDate = 2021-12-31",
+                    "[Weather]"
+                  ],
+                  "Paths": null,
+                  "Values": null,
+                  "Name": "2021_00000",
+                  "ResourceName": null,
+                  "Children": [
+                    {
+                      "$type": "Models.Climate.Weather, Models",
+                      "ConstantsFile": null,
+                      "FileName": "met files1\\s2021_00000.met",
+                      "ExcelWorkSheetName": "",
+                      "Name": "2021_00000",
+                      "ResourceName": null,
+                      "Children": [],
+                      "Enabled": true,
+                      "ReadOnly": false
+                    }
+                  ],
+                  "Enabled": true,
+                  "ReadOnly": false
+                }
+              ],
+              "Enabled": true,
+              "ReadOnly": false
+            }
+          ],
+          "Enabled": true,
+          "ReadOnly": false
+        },
+        {
+          "$type": "Models.Core.Simulation, Models",
+          "Descriptors": null,
+          "Name": "Simulation",
+          "ResourceName": null,
+          "Children": [
+            {
+              "$type": "Models.Clock, Models",
+              "Start": "1900-01-01T00:00:00",
+              "End": "1900-12-31T00:00:00",
+              "Name": "Clock",
+              "ResourceName": null,
+              "Children": [],
+              "Enabled": true,
+              "ReadOnly": false
+            },
+            {
+              "$type": "Models.Summary, Models",
+              "Verbosity": 0,
+              "Name": "Summary",
+              "ResourceName": null,
+              "Children": [],
+              "Enabled": true,
+              "ReadOnly": false
+            },
+            {
+              "$type": "Models.Climate.Weather, Models",
+              "ConstantsFile": null,
+              "FileName": "train.met",
+              "ExcelWorkSheetName": "",
+              "Name": "Weather",
+              "ResourceName": null,
+              "Children": [],
+              "Enabled": true,
+              "ReadOnly": false
+            },
+            {
+              "$type": "Models.Soils.Arbitrator.SoilArbitrator, Models",
+              "Name": "SoilArbitrator",
+              "ResourceName": null,
+              "Children": [],
+              "Enabled": true,
+              "ReadOnly": false
+            },
+            {
+              "$type": "Models.MicroClimate, Models",
+              "a_interception": 0.0,
+              "b_interception": 1.0,
+              "c_interception": 0.0,
+              "d_interception": 0.0,
+              "SoilHeatFluxFraction": 0.4,
+              "MinimumHeightDiffForNewLayer": 0.0,
+              "NightInterceptionFraction": 0.5,
+              "ReferenceHeight": 2.0,
+              "Name": "MicroClimate",
+              "ResourceName": null,
+              "Children": [],
+              "Enabled": true,
+              "ReadOnly": false
+            },
+            {
+              "$type": "Models.Core.Zone, Models",
+              "Area": 1.0,
+              "Slope": 0.0,
+              "AspectAngle": 0.0,
+              "Altitude": 50.0,
+              "Name": "Field",
+              "ResourceName": null,
+              "Children": [
+                {
+                  "$type": "Models.Report, Models",
+                  "VariableNames": [
+                    "[Clock].Today",
+                    "[Wheat].Grain.Total.Wt*10 as Yield",
+                    "[Soil].Water.MM"
+                  ],
+                  "EventNames": [
+                    "[Wheat].Harvesting",
+                    "17-mar"
+                  ],
+                  "GroupByVariableName": null,
+                  "Name": "Report",
+                  "ResourceName": null,
+                  "Children": [],
+                  "Enabled": true,
+                  "ReadOnly": false
+                },
+                {
+                  "$type": "Models.Fertiliser, Models",
+                  "Name": "Fertiliser",
+                  "ResourceName": "Fertiliser",
+                  "Children": [],
+                  "Enabled": true,
+                  "ReadOnly": false
+                },
+                {
+                  "$type": "Models.Surface.SurfaceOrganicMatter, Models",
+                  "SurfOM": [],
+                  "Canopies": [],
+                  "InitialResidueName": "wheat_stubble",
+                  "InitialResidueType": "wheat",
+                  "InitialResidueMass": 500.0,
+                  "InitialStandingFraction": 0.0,
+                  "InitialCPR": 0.0,
+                  "InitialCNR": 100.0,
+                  "Name": "SurfaceOrganicMatter",
+                  "ResourceName": "SurfaceOrganicMatter",
+                  "Children": [],
+                  "Enabled": true,
+                  "ReadOnly": false
+                },
+                {
+                  "$type": "Models.PMF.Plant, Models",
+                  "Name": "Wheat",
+                  "ResourceName": "Wheat",
+                  "Children": [],
+                  "Enabled": true,
+                  "ReadOnly": false
+                },
+                {
+                  "$type": "Models.Manager, Models",
+                  "CodeArray": [
+                    "using Models.Interfaces;",
+                    "using APSIM.Shared.Utilities;",
+                    "using Models.Utilities;",
+                    "using Models.Soils;",
+                    "using Models.PMF;",
+                    "using Models.Core;",
+                    "using System;",
+                    "using System.Linq;",
+                    "using Models.Climate;",
+                    "",
+                    "namespace Models",
+                    "{",
+                    "    [Serializable]",
+                    "    public class Script : Model",
+                    "    {",
+                    "        [Link] private Clock Clock;",
+                    "        [Link] private Fertiliser Fertiliser;",
+                    "        [Link] private Summary Summary;",
+                    "        [Link] private Soil Soil;",
+                    "        private Accumulator accumulatedRain;",
+                    "        [Link]",
+                    "        private ISoilWater waterBalance;",
+                    "        ",
+                    "        [Description(\"Crop\")]",
+                    "        public IPlant Crop { get; set; }",
+                    "",
+                    "        [Description(\"Start of sowing window (d-mmm)\")]",
+                    "        public string StartDate { get; set; }",
+                    "",
+                    "        [Description(\"End of sowing window (d-mmm)\")]",
+                    "        public string EndDate { get; set; }",
+                    "",
+                    "        [Description(\"Minimum extractable soil water for sowing (mm)\")]",
+                    "        public double MinESW { get; set; }",
+                    "",
+                    "        [Description(\"Accumulated rainfall required for sowing (mm)\")]",
+                    "        public double MinRain { get; set; }",
+                    "",
+                    "        [Description(\"Duration of rainfall accumulation (d)\")]",
+                    "        public int RainDays { get; set; }",
+                    "",
+                    "        [Display(Type = DisplayType.CultivarName)]",
+                    "        [Description(\"Cultivar to be sown\")]",
+                    "        public string CultivarName { get; set; }",
+                    "",
+                    "        [Description(\"Sowing depth (mm)\")]",
+                    "        public double SowingDepth { get; set; }",
+                    "",
+                    "        [Description(\"Row spacing (mm)\")]",
+                    "        public double RowSpacing { get; set; }",
+                    "",
+                    "        [Description(\"Plant population (/m2)\")]",
+                    "        public double Population { get; set; }",
+                    "        ",
+                    "        ",
+                    "        [EventSubscribe(\"StartOfSimulation\")]",
+                    "        private void OnSimulationCommencing(object sender, EventArgs e)",
+                    "        {",
+                    "            accumulatedRain = new Accumulator(this, \"[Weather].Rain\", RainDays);",
+                    "        }",
+                    "",
+                    "        [EventSubscribe(\"DoManagement\")]",
+                    "        private void OnDoManagement(object sender, EventArgs e)",
+                    "        {",
+                    "            accumulatedRain.Update();",
+                    "            ",
+                    "            if ((DateUtilities.WithinDates(StartDate, Clock.Today, EndDate) &&",
+                    "                 !Crop.IsAlive &&",
+                    "                 MathUtilities.Sum(waterBalance.ESW) > MinESW &&",
+                    "                 accumulatedRain.Sum > MinRain) ||",
+                    "                (DateUtilities.DatesEqual(EndDate, Clock.Today)))",
+                    "            {",
+                    "                Crop.Sow(population: Population, cultivar: CultivarName, depth: SowingDepth, rowSpacing: RowSpacing);    ",
+                    "            }",
+                    "        }",
+                    "    }",
+                    "}"
+                  ],
+                  "Parameters": [
+                    {
+                      "Key": "Crop",
+                      "Value": "[Wheat]"
+                    },
+                    {
+                      "Key": "StartDate",
+                      "Value": "15-may"
+                    },
+                    {
+                      "Key": "EndDate",
+                      "Value": "10-jul"
+                    },
+                    {
+                      "Key": "MinESW",
+                      "Value": "0"
+                    },
+                    {
+                      "Key": "MinRain",
+                      "Value": "25"
+                    },
+                    {
+                      "Key": "RainDays",
+                      "Value": "3"
+                    },
+                    {
+                      "Key": "CultivarName",
+                      "Value": "Hartog"
+                    },
+                    {
+                      "Key": "SowingDepth",
+                      "Value": "30"
+                    },
+                    {
+                      "Key": "RowSpacing",
+                      "Value": "250"
+                    },
+                    {
+                      "Key": "Population",
+                      "Value": "180"
+                    }
+                  ],
+                  "Name": "Sow using a variable rule",
+                  "ResourceName": null,
+                  "Children": [],
+                  "Enabled": true,
+                  "ReadOnly": false
+                },
+                {
+                  "$type": "Models.Manager, Models",
+                  "CodeArray": [
+                    "using Models.Soils;",
+                    "using System;",
+                    "using System.Linq;",
+                    "using Models.Core;",
+                    "using Models.PMF;",
+                    "namespace Models",
+                    "{",
+                    "    [Serializable]",
+                    "    public class Script : Model",
+                    "    {",
+                    "        [Link] Clock Clock;",
+                    "        [Link] Fertiliser Fertiliser;",
+                    "        ",
+                    "        [Description(\"Crop to be fertilised\")]",
+                    "        public IPlant Crop { get; set; }",
+                    "",
+                    "        [Description(\"Type of fertiliser to apply? \")] ",
+                    "        public Fertiliser.Types FertiliserType { get; set; }",
+                    "    ",
+                    "        [Description(\"Amount of fertiliser to be applied (kg/ha)\")]",
+                    "        public double Amount { get; set; }",
+                    "        ",
+                    "        [EventSubscribe(\"Sowing\")]",
+                    "        private void OnSowing(object sender, EventArgs e)",
+                    "        {",
+                    "            Model crop = sender as Model;",
+                    "            if (Crop != null && crop.Name.ToLower() == (Crop as IModel).Name.ToLower())",
+                    "                Fertiliser.Apply(Amount: Amount, Type: FertiliserType);",
+                    "        }",
+                    "    }",
+                    "}"
+                  ],
+                  "Parameters": [
+                    {
+                      "Key": "Crop",
+                      "Value": "[Wheat]"
+                    },
+                    {
+                      "Key": "FertiliserType",
+                      "Value": "UreaN"
+                    },
+                    {
+                      "Key": "Amount",
+                      "Value": "350"
+                    }
+                  ],
+                  "Name": "Fertilise at sowing",
+                  "ResourceName": null,
+                  "Children": [],
+                  "Enabled": true,
+                  "ReadOnly": false
+                },
+                {
+                  "$type": "Models.Manager, Models",
+                  "CodeArray": [
+                    "using APSIM.Shared.Utilities;",
+                    "using Models.Utilities;",
+                    "using Models.Soils;",
+                    "using Models.PMF;",
+                    "using Models.Core;",
+                    "using System;",
+                    "using System.Linq;",
+                    "",
+                    "namespace Models",
+                    "{",
+                    "    [Serializable] ",
+                    "    public class Script : Model",
+                    "    {",
+                    "        [Description(\"Crop\")]",
+                    "        public IPlant Crop { get; set; }",
+                    "        ",
+                    "        [EventSubscribe(\"DoManagement\")]",
+                    "        private void OnDoManagement(object sender, EventArgs e)",
+                    "        {",
+                    "            if (Crop.IsReadyForHarvesting)",
+                    "            {",
+                    "                Crop.Harvest();",
+                    "                Crop.EndCrop();",
+                    "            }",
+                    "        }",
+                    "    }",
+                    "}",
+                    "       "
+                  ],
+                  "Parameters": [
+                    {
+                      "Key": "Crop",
+                      "Value": "[Wheat]"
+                    }
+                  ],
+                  "Name": "Harvest",
+                  "ResourceName": null,
+                  "Children": [],
+                  "Enabled": true,
+                  "ReadOnly": false
+                },
+                {
+                  "$type": "Models.Soils.Soil, Models",
+                  "RecordNumber": 1,
+                  "ASCOrder": "NA",
+                  "ASCSubOrder": "NA",
+                  "SoilType": "Sandy Loam over Sandy Clay",
+                  "LocalName": null,
+                  "Site": "32598_32115",
+                  "NearestTown": "ROBE",
+                  "Region": "Naracoorte Coastal Plain",
+                  "State": "South Australia",
+                  "Country": null,
+                  "NaturalVegetation": "Unknown",
+                  "ApsoilNumber": "9999",
+                  "Latitude": -37.1654687,
+                  "Longitude": 139.762471,
+                  "LocationAccuracy": "+- 90m",
+                  "YearOfSampling": "2024",
+                  "DataSource": "Soil and Landscape Grid of Australia. This soil parameter file was automatically generated from the GSM National Surfaces using pedotransfer functions.",
+                  "Comments": "Landuse is Grazing natural vegetation",
+                  "Name": "Synthetic Soil Derived from the SLGA",
+                  "ResourceName": null,
+                  "Children": [
+                    {
+                      "$type": "Models.Soils.Water, Models",
+                      "Thickness": [
+                        150.0,
+                        150.0,
+                        150.0,
+                        150.0,
+                        200.0,
+                        200.0
+                      ],
+                      "InitialValues": [
+                        0.162,
+                        0.16,
+                        0.168,
+                        0.172,
+                        0.173,
+                        0.17
+                      ],
+                      "InitialPAWmm": 15.849999999999998,
+                      "RelativeTo": "LL15",
+                      "FilledFromTop": false,
+                      "Name": "Water",
+                      "ResourceName": null,
+                      "Children": [],
+                      "Enabled": true,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.Soils.Physical, Models",
+                      "Thickness": [
+                        150.0,
+                        150.0,
+                        150.0,
+                        150.0,
+                        200.0,
+                        200.0
+                      ],
+                      "ParticleSizeClay": null,
+                      "ParticleSizeSand": null,
+                      "ParticleSizeSilt": null,
+                      "Rocks": null,
+                      "Texture": null,
+                      "BD": [
+                        1.359,
+                        1.407,
+                        1.415,
+                        1.415,
+                        1.425,
+                        1.44
+                      ],
+                      "AirDry": [
+                        0.047,
+                        0.048,
+                        0.051,
+                        0.052,
+                        0.053,
+                        0.052
+                      ],
+                      "LL15": [
+                        0.142,
+                        0.143,
+                        0.153,
+                        0.157,
+                        0.158,
+                        0.156
+                      ],
+                      "DUL": [
+                        0.243,
+                        0.226,
+                        0.23,
+                        0.234,
+                        0.232,
+                        0.228
+                      ],
+                      "SAT": [
+                        0.423,
+                        0.413,
+                        0.414,
+                        0.416,
+                        0.413,
+                        0.408
+                      ],
+                      "KS": [
+                        46.42,
+                        27.21,
+                        17.983,
+                        15.386,
+                        14.616,
+                        14.432
+                      ],
+                      "BDMetadata": null,
+                      "AirDryMetadata": null,
+                      "LL15Metadata": null,
+                      "DULMetadata": null,
+                      "SATMetadata": null,
+                      "KSMetadata": null,
+                      "RocksMetadata": null,
+                      "TextureMetadata": null,
+                      "ParticleSizeSandMetadata": null,
+                      "ParticleSizeSiltMetadata": null,
+                      "ParticleSizeClayMetadata": null,
+                      "Name": "Physical",
+                      "ResourceName": null,
+                      "Children": [
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.148,
+                            0.148,
+                            0.157,
+                            0.162,
+                            0.161,
+                            0.159
+                          ],
+                          "KL": [
+                            0.06,
+                            0.06,
+                            0.06,
+                            0.055,
+                            0.048,
+                            0.04
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "WheatSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.148,
+                            0.148,
+                            0.157,
+                            0.162,
+                            0.161,
+                            0.159
+                          ],
+                          "KL": [
+                            0.06,
+                            0.06,
+                            0.06,
+                            0.055,
+                            0.048,
+                            0.04
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "EucalyptusSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.148,
+                            0.148,
+                            0.157,
+                            0.162,
+                            0.161,
+                            0.159
+                          ],
+                          "KL": [
+                            0.06,
+                            0.06,
+                            0.06,
+                            0.055,
+                            0.048,
+                            0.04
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "PinusSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.148,
+                            0.148,
+                            0.157,
+                            0.162,
+                            0.161,
+                            0.159
+                          ],
+                          "KL": [
+                            0.06,
+                            0.06,
+                            0.06,
+                            0.055,
+                            0.048,
+                            0.04
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "SCRUMSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.148,
+                            0.148,
+                            0.157,
+                            0.162,
+                            0.161,
+                            0.159
+                          ],
+                          "KL": [
+                            0.06,
+                            0.06,
+                            0.06,
+                            0.055,
+                            0.048,
+                            0.04
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "OatsSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.149,
+                            0.149,
+                            0.158,
+                            0.162,
+                            0.162,
+                            0.16
+                          ],
+                          "KL": [
+                            0.07,
+                            0.07,
+                            0.07,
+                            0.066,
+                            0.06,
+                            0.053
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "SorghumSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.149,
+                            0.149,
+                            0.158,
+                            0.162,
+                            0.162,
+                            0.16
+                          ],
+                          "KL": [
+                            0.07,
+                            0.07,
+                            0.07,
+                            0.065,
+                            0.058,
+                            0.049
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "BarleySoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.148,
+                            0.148,
+                            0.157,
+                            0.162,
+                            0.162,
+                            0.16
+                          ],
+                          "KL": [
+                            0.06,
+                            0.06,
+                            0.06,
+                            0.06,
+                            0.055,
+                            0.046
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "ChickpeaSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.148,
+                            0.148,
+                            0.157,
+                            0.162,
+                            0.161,
+                            0.159
+                          ],
+                          "KL": [
+                            0.06,
+                            0.06,
+                            0.06,
+                            0.058,
+                            0.048,
+                            0.036
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "MungbeanSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.152,
+                            0.152,
+                            0.16,
+                            0.165,
+                            0.165,
+                            0.163
+                          ],
+                          "KL": [
+                            0.1,
+                            0.1,
+                            0.1,
+                            0.1,
+                            0.1,
+                            0.094
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "CottonSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.148,
+                            0.148,
+                            0.157,
+                            0.162,
+                            0.161,
+                            0.159
+                          ],
+                          "KL": [
+                            0.06,
+                            0.06,
+                            0.06,
+                            0.055,
+                            0.048,
+                            0.04
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "CanolaSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.148,
+                            0.148,
+                            0.157,
+                            0.162,
+                            0.162,
+                            0.159
+                          ],
+                          "KL": [
+                            0.06,
+                            0.06,
+                            0.06,
+                            0.06,
+                            0.055,
+                            0.045
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "Pigeon PeaSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.148,
+                            0.148,
+                            0.157,
+                            0.162,
+                            0.161,
+                            0.159
+                          ],
+                          "KL": [
+                            0.06,
+                            0.06,
+                            0.06,
+                            0.055,
+                            0.048,
+                            0.04
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "MaizeSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.148,
+                            0.148,
+                            0.157,
+                            0.162,
+                            0.161,
+                            0.159
+                          ],
+                          "KL": [
+                            0.06,
+                            0.06,
+                            0.06,
+                            0.055,
+                            0.048,
+                            0.04
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "CowpeasSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.152,
+                            0.151,
+                            0.159,
+                            0.163,
+                            0.162,
+                            0.16
+                          ],
+                          "KL": [
+                            0.1,
+                            0.093,
+                            0.084,
+                            0.075,
+                            0.065,
+                            0.053
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "SunflowerSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.15,
+                            0.15,
+                            0.159,
+                            0.164,
+                            0.163,
+                            0.161
+                          ],
+                          "KL": [
+                            0.08,
+                            0.08,
+                            0.08,
+                            0.08,
+                            0.079,
+                            0.069
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "FababeanSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.152,
+                            0.152,
+                            0.16,
+                            0.165,
+                            0.165,
+                            0.163
+                          ],
+                          "KL": [
+                            0.1,
+                            0.1,
+                            0.1,
+                            0.1,
+                            0.1,
+                            0.1
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "LucerneSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.152,
+                            0.152,
+                            0.16,
+                            0.165,
+                            0.165,
+                            0.163
+                          ],
+                          "KL": [
+                            0.1,
+                            0.1,
+                            0.1,
+                            0.1,
+                            0.1,
+                            0.094
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "PerennialsSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.148,
+                            0.148,
+                            0.157,
+                            0.162,
+                            0.161,
+                            0.159
+                          ],
+                          "KL": [
+                            0.06,
+                            0.06,
+                            0.06,
+                            0.055,
+                            0.048,
+                            0.04
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "LupinsSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.148,
+                            0.148,
+                            0.157,
+                            0.162,
+                            0.161,
+                            0.159
+                          ],
+                          "KL": [
+                            0.06,
+                            0.06,
+                            0.06,
+                            0.055,
+                            0.048,
+                            0.04
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "LentilsSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.149,
+                            0.149,
+                            0.158,
+                            0.162,
+                            0.161,
+                            0.158
+                          ],
+                          "KL": [
+                            0.07,
+                            0.07,
+                            0.065,
+                            0.056,
+                            0.045,
+                            0.032
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "TriticaleSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.149,
+                            0.149,
+                            0.158,
+                            0.162,
+                            0.162,
+                            0.16
+                          ],
+                          "KL": [
+                            0.07,
+                            0.07,
+                            0.07,
+                            0.066,
+                            0.06,
+                            0.053
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "MilletSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.148,
+                            0.148,
+                            0.157,
+                            0.162,
+                            0.161,
+                            0.159
+                          ],
+                          "KL": [
+                            0.06,
+                            0.06,
+                            0.06,
+                            0.055,
+                            0.048,
+                            0.04
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "SoybeansSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.148,
+                            0.148,
+                            0.157,
+                            0.162,
+                            0.161,
+                            0.159
+                          ],
+                          "KL": [
+                            0.06,
+                            0.06,
+                            0.06,
+                            0.055,
+                            0.048,
+                            0.04
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": null,
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "Pasture grasses & legumesSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
+                        }
+                      ],
+                      "Enabled": true,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.WaterModel.WaterBalance, Models",
+                      "SummerDate": "1-nov",
+                      "SummerU": 6.0,
+                      "SummerCona": 6.0,
+                      "WinterDate": "1-apr",
+                      "WinterU": 2.0,
+                      "WinterCona": 2.0,
+                      "DiffusConst": 216.57509344567288,
+                      "DiffusSlope": 51.394373032459335,
+                      "Salb": 0.13,
+                      "CN2Bare": 78.0,
+                      "CNRed": 20.0,
+                      "CNCov": 0.0,
+                      "DischargeWidth": 10.0,
+                      "CatchmentArea": 161086.703125,
+                      "PSIDul": -100.0,
+                      "Thickness": [
+                        150.0,
+                        150.0,
+                        150.0,
+                        150.0,
+                        200.0,
+                        200.0
+                      ],
+                      "SWCON": [
+                        0.447547644580297,
+                        0.374152942138699,
+                        0.315955128560783,
+                        0.294673140017058,
+                        0.24167625781322,
+                        0.240893856705547
+                      ],
+                      "KLAT": null,
+                      "Name": "SoilWater",
+                      "ResourceName": "WaterBalance",
+                      "Children": [],
+                      "Enabled": true,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.Soils.Organic, Models",
+                      "FOMCNRatio": 40.0,
+                      "Thickness": [
+                        150.0,
+                        150.0,
+                        150.0,
+                        150.0,
+                        200.0,
+                        200.0
+                      ],
+                      "Carbon": [
+                        1.74135962220812,
+                        0.816209492681014,
+                        0.47130952721121,
+                        0.400901135300571,
+                        0.322900910880664,
+                        0.246051320175092
+                      ],
+                      "CarbonUnits": 0,
+                      "SoilCNRatio": [
+                        12.1221178943398,
+                        12.1221178943398,
+                        12.1221178943398,
+                        12.1221178943398,
+                        12.1221178943398,
+                        12.1221178943398
+                      ],
+                      "FBiom": [
+                        0.04,
+                        0.03106,
+                        0.01404,
+                        0.01,
+                        0.01,
+                        0.01
+                      ],
+                      "FInert": [
+                        0.204162092700038,
+                        0.440885758305592,
+                        0.74146815072891,
+                        0.871726791126694,
+                        0.993680952833011,
+                        1.0
+                      ],
+                      "FOM": [
+                        475.4746586022116,
+                        303.1760277075219,
+                        193.3135701631787,
+                        123.26217442655363,
+                        67.64771561554412,
+                        37.12585348499021
+                      ],
+                      "CarbonMetadata": null,
+                      "FOMMetadata": null,
+                      "Name": "Organic",
+                      "ResourceName": null,
+                      "Children": [],
+                      "Enabled": true,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.Soils.Chemical, Models",
+                      "Thickness": [
+                        150.0,
+                        150.0,
+                        150.0,
+                        150.0,
+                        200.0,
+                        200.0
+                      ],
+                      "PH": [
+                        7.06331560210208,
+                        7.44490971347243,
+                        7.44426378993847,
+                        7.43318322180776,
+                        7.72759826722277,
+                        8.06226462944599
+                      ],
+                      "PHUnits": 0,
+                      "EC": null,
+                      "ESP": null,
+                      "CEC": null,
+                      "ECMetadata": null,
+                      "CLMetadata": null,
+                      "ESPMetadata": null,
+                      "PHMetadata": null,
+                      "Name": "Chemical",
+                      "ResourceName": null,
+                      "Children": [],
+                      "Enabled": true,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.Soils.Solute, Models",
+                      "Thickness": [
+                        1800.0
+                      ],
+                      "InitialValues": [
+                        3.0
+                      ],
+                      "InitialValuesUnits": 0,
+                      "WaterTableConcentration": 0.0,
+                      "D0": 0.0,
+                      "Exco": null,
+                      "FIP": null,
+                      "DepthConstant": 0.0,
+                      "MaxDepthSoluteAccessible": 0.0,
+                      "RunoffEffectivenessAtMovingSolute": 0.0,
+                      "MaxEffectiveRunoff": 0.0,
+                      "Name": "NO3",
+                      "ResourceName": null,
+                      "Children": [],
+                      "Enabled": true,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.Soils.Solute, Models",
+                      "Thickness": [
+                        1800.0
+                      ],
+                      "InitialValues": [
+                        1.0
+                      ],
+                      "InitialValuesUnits": 0,
+                      "WaterTableConcentration": 0.0,
+                      "D0": 0.0,
+                      "Exco": null,
+                      "FIP": null,
+                      "DepthConstant": 0.0,
+                      "MaxDepthSoluteAccessible": 0.0,
+                      "RunoffEffectivenessAtMovingSolute": 0.0,
+                      "MaxEffectiveRunoff": 0.0,
+                      "Name": "NH4",
+                      "ResourceName": null,
+                      "Children": [],
+                      "Enabled": true,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.Soils.Solute, Models",
+                      "Thickness": [
+                        1800.0
+                      ],
+                      "InitialValues": [
+                        0.0
+                      ],
+                      "InitialValuesUnits": 0,
+                      "WaterTableConcentration": 0.0,
+                      "D0": 0.0,
+                      "Exco": null,
+                      "FIP": null,
+                      "DepthConstant": 0.0,
+                      "MaxDepthSoluteAccessible": 0.0,
+                      "RunoffEffectivenessAtMovingSolute": 0.0,
+                      "MaxEffectiveRunoff": 0.0,
+                      "Name": "Urea",
+                      "ResourceName": null,
+                      "Children": [],
+                      "Enabled": true,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.Soils.CERESSoilTemperature, Models",
+                      "Name": "CERESSoilTemperature",
+                      "ResourceName": null,
+                      "Children": [],
+                      "Enabled": true,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.Soils.Nutrients.Nutrient, Models",
+                      "Name": "Nutrient",
+                      "ResourceName": "Nutrient",
+                      "Children": [],
+                      "Enabled": true,
+                      "ReadOnly": false
+                    }
+                  ],
+                  "Enabled": true,
+                  "ReadOnly": false
+                },
+                {
+                  "$type": "Models.Soils.Soil, Models",
+                  "RecordNumber": 1164,
+                  "ASCOrder": "Kandosol",
+                  "ASCSubOrder": "Brown",
+                  "SoilType": "Clay loam",
+                  "LocalName": null,
+                  "Site": "Greenways",
+                  "NearestTown": "Lucindale",
+                  "Region": "Lower Southeast",
+                  "State": "South Australia",
+                  "Country": "Australia",
+                  "NaturalVegetation": null,
+                  "ApsoilNumber": "1252",
+                  "Latitude": -37.196722,
+                  "Longitude": 140.232481,
+                  "LocationAccuracy": "+/- 5m",
+                  "YearOfSampling": "2015",
+                  "DataSource": "CSIRO in collaboration with GRDC Project 'Measuring and managing soil water in Australian agriculture' ",
+                  "Comments": "Deep gradational sandy loam - Soil is located in a plain. This profile hit calcrete so could be extended in similar soils that are deeper. Tentative characterisation only. Shallow soil on calcrete. Crops may in some situations be able to extract water from calcrete or cracks within calcrete. Plant available water within calcrete layer still to be assessed. Yields may be underestimated with current characterisation.",
+                  "Name": "Deep gradational sandy loam (Lucindale No1252)",
+                  "ResourceName": null,
+                  "Children": [
+                    {
+                      "$type": "Models.Soils.Physical, Models",
+                      "Thickness": [
+                        100.0,
+                        100.0,
+                        200.0,
+                        200.0
+                      ],
+                      "ParticleSizeClay": [
+                        20.26,
+                        24.61,
+                        27.75,
+                        34.93
+                      ],
+                      "ParticleSizeSand": [
+                        42.69,
+                        40.32,
+                        57.8,
+                        50.4
+                      ],
+                      "ParticleSizeSilt": [
+                        37.05,
+                        35.06,
+                        14.46,
+                        14.67
+                      ],
+                      "Rocks": null,
+                      "Texture": null,
+                      "BD": [
+                        0.817,
+                        1.015,
+                        1.387,
+                        1.31
+                      ],
+                      "AirDry": [
+                        0.089,
+                        0.173,
+                        0.229,
+                        0.24
+                      ],
+                      "LL15": [
+                        0.179,
+                        0.216,
+                        0.229,
+                        0.24
+                      ],
+                      "DUL": [
+                        0.413,
+                        0.368,
+                        0.295,
+                        0.35
+                      ],
+                      "SAT": [
+                        0.642,
+                        0.567,
+                        0.426,
+                        0.456
+                      ],
+                      "KS": null,
+                      "BDMetadata": [
+                        "Field measured and checked for sensibility",
+                        "Field measured and checked for sensibility",
+                        "Field measured and checked for sensibility",
+                        "Field measured and checked for sensibility"
+                      ],
+                      "AirDryMetadata": [
+                        "Estimated based on local knowledge",
+                        "Estimated based on local knowledge",
+                        "Estimated based on local knowledge",
+                        "Estimated based on local knowledge"
+                      ],
+                      "LL15Metadata": [
+                        "Estimated based on local knowledge",
+                        "Estimated based on local knowledge",
+                        "Estimated based on local knowledge",
+                        "Estimated based on local knowledge"
+                      ],
+                      "DULMetadata": [
+                        "Field measured and checked for sensibility",
+                        "Field measured and checked for sensibility",
+                        "Field measured and checked for sensibility",
+                        "Field measured and checked for sensibility"
+                      ],
+                      "SATMetadata": [
+                        "Calculated from measured, estimated or calculated BD",
+                        "Calculated from measured, estimated or calculated BD",
+                        "Calculated from measured, estimated or calculated BD",
+                        "Calculated from measured, estimated or calculated BD"
+                      ],
+                      "KSMetadata": null,
+                      "RocksMetadata": null,
+                      "TextureMetadata": null,
+                      "ParticleSizeSandMetadata": null,
+                      "ParticleSizeSiltMetadata": null,
+                      "ParticleSizeClayMetadata": null,
+                      "Name": "Physical",
+                      "ResourceName": null,
+                      "Children": [
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.179,
+                            0.216,
+                            0.229,
+                            0.24
+                          ],
+                          "KL": [
+                            0.06,
+                            0.06,
+                            0.06,
+                            0.06
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": [
+                            "Field measured and checked for sensibility",
+                            "Field measured and checked for sensibility",
+                            "Field measured and checked for sensibility",
+                            "Field measured and checked for sensibility"
+                          ],
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "wheatSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": false,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.179,
+                            0.216,
+                            0.229,
+                            0.24
+                          ],
+                          "KL": [
+                            0.06,
+                            0.06,
+                            0.06,
+                            0.06
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": [
+                            "Field measured and checked for sensibility",
+                            "Field measured and checked for sensibility",
+                            "Field measured and checked for sensibility",
+                            "Field measured and checked for sensibility"
+                          ],
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "barleySoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": false,
+                          "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilCrop, Models",
+                          "LL": [
+                            0.179,
+                            0.216,
+                            0.229,
+                            0.24
+                          ],
+                          "KL": [
+                            0.06,
+                            0.06,
+                            0.06,
+                            0.06
+                          ],
+                          "XF": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                          ],
+                          "LLMetadata": [
+                            "Field measured and checked for sensibility",
+                            "Field measured and checked for sensibility",
+                            "Field measured and checked for sensibility",
+                            "Field measured and checked for sensibility"
+                          ],
+                          "KLMetadata": null,
+                          "XFMetadata": null,
+                          "Name": "canolaSoil",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": false,
+                          "ReadOnly": false
+                        }
+                      ],
+                      "Enabled": false,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.WaterModel.WaterBalance, Models",
+                      "SummerDate": "1-nov",
+                      "SummerU": 6.0,
+                      "SummerCona": 3.5,
+                      "WinterDate": "1-apr",
+                      "WinterU": 2.0,
+                      "WinterCona": 2.0,
+                      "DiffusConst": 88.0,
+                      "DiffusSlope": 35.0,
+                      "Salb": 0.14,
+                      "CN2Bare": 73.0,
+                      "CNRed": 20.0,
+                      "CNCov": 0.8,
+                      "DischargeWidth": "NaN",
+                      "CatchmentArea": "NaN",
+                      "PSIDul": -100.0,
+                      "Thickness": [
+                        100.0,
+                        100.0,
+                        200.0,
+                        200.0
+                      ],
+                      "SWCON": [
+                        0.5,
+                        0.5,
+                        0.5,
+                        0.3
+                      ],
+                      "KLAT": null,
+                      "Name": "SoilWater",
+                      "ResourceName": "WaterBalance",
+                      "Children": [],
+                      "Enabled": false,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.Soils.Organic, Models",
+                      "FOMCNRatio": 40.0,
+                      "Thickness": [
+                        100.0,
+                        100.0,
+                        200.0,
+                        200.0
+                      ],
+                      "Carbon": [
+                        3.9,
+                        3.32,
+                        1.03,
+                        0.68
+                      ],
+                      "CarbonUnits": 1,
+                      "SoilCNRatio": [
+                        12.0,
+                        12.0,
+                        12.0,
+                        12.0
+                      ],
+                      "FBiom": [
+                        0.035,
+                        0.02,
+                        0.015,
+                        0.015
+                      ],
+                      "FInert": [
+                        0.4,
+                        0.5,
+                        0.7,
+                        0.95
+                      ],
+                      "FOM": [
+                        523.0820908987207,
+                        317.26532567666476,
+                        116.71539071300708,
+                        42.9371927116076
+                      ],
+                      "CarbonMetadata": null,
+                      "FOMMetadata": null,
+                      "Name": "Organic",
+                      "ResourceName": null,
+                      "Children": [],
+                      "Enabled": false,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.Soils.Chemical, Models",
+                      "Thickness": [
+                        100.0,
+                        100.0,
+                        200.0,
+                        200.0
+                      ],
+                      "PH": [
+                        8.1,
+                        8.2,
+                        8.5,
+                        8.6
+                      ],
+                      "PHUnits": 0,
+                      "EC": [
+                        0.27,
+                        0.21,
+                        0.161,
+                        0.144
+                      ],
+                      "ESP": [
+                        0.637,
+                        0.624,
+                        0.782,
+                        0.778
+                      ],
+                      "CEC": [
+                        51.8,
+                        43.3,
+                        29.4,
+                        27.0
+                      ],
+                      "ECMetadata": [
+                        "Measured",
+                        "Measured",
+                        "Measured",
+                        "Measured"
+                      ],
+                      "CLMetadata": [
+                        "Measured",
+                        "Measured",
+                        "Measured",
+                        "Measured"
+                      ],
+                      "ESPMetadata": [
+                        "C",
+                        "C",
+                        "C",
+                        "C"
+                      ],
+                      "PHMetadata": [
+                        "Measured",
+                        "Measured",
+                        "Measured",
+                        "Measured"
+                      ],
+                      "Name": "Chemical",
+                      "ResourceName": null,
+                      "Children": [],
+                      "Enabled": false,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.Soils.Nutrients.Nutrient, Models",
+                      "Name": "Nutrient",
+                      "ResourceName": "Nutrient",
+                      "Children": [],
+                      "Enabled": false,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.Soils.Solute, Models",
+                      "Thickness": null,
+                      "InitialValues": null,
+                      "InitialValuesUnits": 0,
+                      "WaterTableConcentration": 0.0,
+                      "D0": 0.0,
+                      "Exco": null,
+                      "FIP": null,
+                      "DepthConstant": 0.0,
+                      "MaxDepthSoluteAccessible": 0.0,
+                      "RunoffEffectivenessAtMovingSolute": 0.0,
+                      "MaxEffectiveRunoff": 0.0,
+                      "Name": "NO3",
+                      "ResourceName": null,
+                      "Children": [],
+                      "Enabled": false,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.Soils.Solute, Models",
+                      "Thickness": null,
+                      "InitialValues": null,
+                      "InitialValuesUnits": 0,
+                      "WaterTableConcentration": 0.0,
+                      "D0": 0.0,
+                      "Exco": null,
+                      "FIP": null,
+                      "DepthConstant": 0.0,
+                      "MaxDepthSoluteAccessible": 0.0,
+                      "RunoffEffectivenessAtMovingSolute": 0.0,
+                      "MaxEffectiveRunoff": 0.0,
+                      "Name": "NH4",
+                      "ResourceName": null,
+                      "Children": [],
+                      "Enabled": false,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.Soils.Solute, Models",
+                      "Thickness": [
+                        100.0,
+                        100.0,
+                        200.0,
+                        200.0
+                      ],
+                      "InitialValues": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0
+                      ],
+                      "InitialValuesUnits": 1,
+                      "WaterTableConcentration": 0.0,
+                      "D0": 0.0,
+                      "Exco": null,
+                      "FIP": null,
+                      "DepthConstant": 0.0,
+                      "MaxDepthSoluteAccessible": 0.0,
+                      "RunoffEffectivenessAtMovingSolute": 0.0,
+                      "MaxEffectiveRunoff": 0.0,
+                      "Name": "Urea",
+                      "ResourceName": null,
+                      "Children": [],
+                      "Enabled": false,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.Soils.Water, Models",
+                      "Thickness": [
+                        100.0,
+                        100.0,
+                        200.0,
+                        200.0
+                      ],
+                      "InitialValues": [
+                        0.413,
+                        0.292,
+                        0.229,
+                        0.24
+                      ],
+                      "InitialPAWmm": 30.999999999999996,
+                      "RelativeTo": "LL15",
+                      "FilledFromTop": true,
+                      "Name": "Water",
+                      "ResourceName": null,
+                      "Children": [],
+                      "Enabled": false,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.Soils.CERESSoilTemperature, Models",
+                      "Name": "CERESSoilTemperature",
+                      "ResourceName": null,
+                      "Children": [],
+                      "Enabled": false,
+                      "ReadOnly": false
+                    }
+                  ],
+                  "Enabled": false,
+                  "ReadOnly": false
+                }
+              ],
+              "Enabled": true,
+              "ReadOnly": false
+            }
+          ],
+          "Enabled": true,
+          "ReadOnly": false
+        }
+      ],
+      "Enabled": true,
+      "ReadOnly": false
+    }
+  ],
+  "Enabled": true,
+  "ReadOnly": false
+}
