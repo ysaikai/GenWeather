@@ -1,6 +1,6 @@
 # Generative weather for improved crop model simulations
 
-A preprint is to be on arXiv. The code was tested under Python `3.11.5`, PyTorch `2.2.0` and NumPy `1.26.3`.
+A [preprint](https://arxiv.org/abs/2404.00528) is on arXiv. The code was tested under Python `3.11.5`, PyTorch `2.2.0` and NumPy `1.26.3`.
 
 - `train.py`: training
 - `weather.py`: weather sampling
